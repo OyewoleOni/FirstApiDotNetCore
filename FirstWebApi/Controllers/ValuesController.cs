@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FirstWebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstWebApi.Controllers
@@ -12,22 +13,23 @@ namespace FirstWebApi.Controllers
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Value>> Get()
         {
-            return new string [] { "value1", "value2" };
+            return new Value [] { new Value { Id = 1, Text = "Value 1" }, new Value { Id = 2, Text = "Value 2" } };
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet("{id:int}")]
+        public ActionResult<Value> Get(int id)
         {
-            return "value";
+            return new Value { Id = id, Text="Value" };
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Value value)
         {
+            return CreatedAtAction("Get", new { id = value.Id }, value);
         }
 
         // PUT api/values/5
