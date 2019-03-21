@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FirstWebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ValuesController : ControllerBase
     {
         // GET api/values
@@ -27,8 +29,13 @@ namespace FirstWebApi.Controllers
 
         // POST api/values
         [HttpPost]
+        [Produces ("application/json", Type =typeof(Value))]
         public IActionResult Post([FromBody] Value value)
         {
+            if ( !ModelState.IsValid )
+            {
+                return BadRequest(ModelState);
+            }
             return CreatedAtAction("Get", new { id = value.Id }, value);
         }
 

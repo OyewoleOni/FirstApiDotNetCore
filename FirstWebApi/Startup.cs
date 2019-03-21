@@ -25,7 +25,10 @@ namespace FirstWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddAuthentication().AddJwtBearer();
+            services.AddMvc()
+                        .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                        .AddXmlDataContractSerializerFormatters();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
@@ -48,6 +51,11 @@ namespace FirstWebApi
                 app.UseHsts();
             }
 
+           
+            app.UseJwtBearerAuthentication(new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerOptions
+            {
+                Authority =
+            })
             app.UseSwagger();
             //app.UseSwaggerUI();
             app.UseSwaggerUI(c =>
